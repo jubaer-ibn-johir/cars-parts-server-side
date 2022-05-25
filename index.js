@@ -19,6 +19,7 @@ async function run(){
   try{
     await client.connect();
     const purchaseCollection = client.db('cars-Parts').collection('purchase');
+    const myOrderCollection = client.db('cars-Parts').collection('myOrder');
 
     app.get('/purchase', async (req, res) => {
       const query = {};
@@ -32,7 +33,22 @@ async function run(){
       const query = {_id: ObjectId(id)};
       const purchase = await purchaseCollection.findOne(query);
       res.send(purchase);
-    })
+    });
+
+    app.post('/myOrder', async(req,res)=> {
+      const newOrder = req.body;
+      const result = await myOrderCollection.insertOne(newOrder);
+      res.send(result);
+    });
+
+    app.get('/myOrder', async (req, res) => {
+      const email = req.query.email;
+      //const query = {};
+      const query = {email: email,}
+      const cursor = myOrderCollection.find(query);
+      const myOrder = await cursor.toArray();
+      res.send(myOrder);
+    });
 
 
 
