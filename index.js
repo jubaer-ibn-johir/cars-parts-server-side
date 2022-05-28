@@ -127,12 +127,10 @@ async function run() {
       const result = await dashBoardCollection.insertOne(dashboard);
       res.send(result);
     });
-
-    // app.post("/dashboard", async (req, res) => {
-    //   const dashboard = req.body;
-    //   const result = await dashBoardCollection.insertOne(dashboard);
-    //   res.send(result);
-    // });
+    
+    
+    // app.post("/dashboard", async (req, res)
+      
 
   } finally {
   }
