@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-//const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
@@ -39,6 +38,7 @@ async function run() {
     const purchaseCollection = client.db("cars-Parts").collection("purchase");
     const myOrderCollection = client.db("cars-Parts").collection("myOrder");
     const userCollection = client.db("cars-Parts").collection("user");
+    const dashBoardCollection = client.db("cars-Parts").collection("dashboard");
 
     app.get("/purchase", async (req, res) => {
       const query = {};
@@ -52,6 +52,12 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const purchase = await purchaseCollection.findOne(query);
       res.send(purchase);
+    });
+
+    app.post("/purchase", async (req, res) => {
+      const purchase = req.body;
+      const result = await purchaseCollection.insertOne(purchase);
+      res.send(result);
     });
 
     app.get('/user', async(req, res) => {
@@ -102,17 +108,19 @@ async function run() {
     });
 
     app.get("/myOrder", async (req, res) => {
-      const email = req.query.email;
-      // const decodedEmail = req.decoded.email;
-
-      // const authorization = req.headers.authorization;
-      // console.log("auth header", authorization); 
-
+      const email = req.query.email; 
       const query = { email: email };
       const cursor = await myOrderCollection.find(query);
       const myOrder = await cursor.toArray();
       res.send(myOrder);
     });
+
+    app.post("/dashboard", async (req, res) => {
+      const dashboard = req.body;
+      const result = await dashBoardCollection.insertOne(dashboard);
+      res.send(result);
+    });
+
   } finally {
   }
 }
