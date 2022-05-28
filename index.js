@@ -115,6 +115,13 @@ async function run() {
       res.send(myOrder);
     });
 
+    app.get('/myOrder/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: ObjectId(id)};
+      const myOrder = await myOrderCollection.findOne(query);
+      res.send(myOrder);
+    })
+
     app.post("/dashboard", async (req, res) => {
       const dashboard = req.body;
       const result = await dashBoardCollection.insertOne(dashboard);
